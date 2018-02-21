@@ -1,0 +1,5 @@
+- hosts: local
+  roles:
+    - { role: rsyslog,  name: default }
+    - { role: rsyslog,  name: remote , server: 10.9.9.1}
+    - { role: rsyslog,  name: custom }
