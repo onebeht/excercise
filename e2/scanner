@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]
+then
+	echo "** USAGE[$#]: $0 <ip_address/mask>"
+	echo "** EXAMPLE: $0 10.0.0.0"
+	echo "** EXAMPLE: $0 10.0.0.0/24"
+	exit
+fi
+
+HOMEDIR='/tmp'
+
+nmap='nmap -Pn -v -T5 -n --open'
+input="${1}"
+
+inputfile=`echo "${input}" | sed 's#\/#-#g'`
+oldfile=${HOMEDIR}/"${inputfile}"
+tmpfile="${oldfile}".tmp
+
+${nmap} ${input} 2>&1 |\
+	awk '/^Discovered/ {print "Host:", $6 "\t" "Ports:" $4 "////"}' |\
+	sed 's#\/#/open/#' >$tmpfile
+
+OUTPUT=`printf "*Target - %s: Full scan results:*" "${input}" `
+
+if [ -f "${oldfile}" ]
+then
+	diff -q "${oldfile}" "${tmpfile}" >/dev/null || OUTPUT=`printf "*Target - %s: No new records found in the last scan.*" "${input}" `
+	echo "${OUTPUT}"
+else
+	echo "${OUTPUT}"
+	cat "${tmpfile}"
+fi
+
+mv "${tmpfile}" "${oldfile}"
