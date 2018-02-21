@@ -16,12 +16,12 @@ $ ./scanner 10.1.1.1
 *Target - 10.1.1.1: Full scan results:*
 Host: 10.1.1.1 Ports: 22/open/tcp////
 Host: 10.1.1.1 Ports: 25/open/tcp////
-Repetitive scan with no changes on target host:
 
+Repetitive scan with no changes on target host:
 $ ./scanner 10.1.1.1
 *Target - 10.1.1.1: No new records found in the last scan.*
-Repetitive scan with changes on target host:
 
+Repetitive scan with changes on target host:
 $ ./scanner 10.1.1.1
 *Target - 10.1.1.1: Full scan results:*
 Host: 10.1.1.1 Ports: 22/open/tcp////
