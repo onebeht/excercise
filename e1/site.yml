@@ -1,0 +1,18 @@
+---
+- hosts: local
+  tasks:
+    - command: docker
+      register: result
+      ignore_errors: True
+
+    - command: sudo apt install docker.io
+      when: result|failed
+
+    - command: bash -c "echo '{\"log-driver\":\"syslog\"}' >/etc/docker/daemon.json" 
+      become: yes
+      become_user: root
+      become_method: sudo
+
+    - command: sudo /etc/init.d/docker stop
+
+    - command: sudo /etc/init.d/docker start
