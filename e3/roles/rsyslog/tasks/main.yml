@@ -1,1 +1,19 @@
+- name: be sure rsyslog is installed
+  become: yes
+  apt: name=rsyslog state=present
+  tags: rsyslog
 
+- name: be sure rsyslog is configured
+  become: yes
+  template: 
+       src="{{ role_path }}/templates/rsyslog_{{ name }}.conf" 
+       dest=/etc/rsyslog.d/
+       mode=644 owner=root group=root
+  notify:
+    - restart rsyslog
+  tags: rsyslog
+
+- name: be sure rsyslog is running and enabled
+  become: yes
+  service: name=rsyslog state=started enabled=yes
+  tags: rsyslog
